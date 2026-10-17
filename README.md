@@ -310,11 +310,11 @@ PodSnippet Studio is pre-configured for automated deployment on [Render](https:/
 
 Built specifically for the **[Hacktoberfest Open-Source AI Challenge: Week 2 (Side Hustle)](https://dev.to/challenges/hacktoberfest-week2-2026-10-12)**:
 
-* 🥇 **Overall Winner ($250):** A complete, production-grade micro-SaaS with sound unit economics, exceptional UI/UX, and immediate utility for creators.
-* 🤖 **Best Use of Gemma ($200):** Leverages open-weight Google Gemma 2 for spoken script adaptation, oral pacing, and technical phonetic adaptation.
-* 🎙️ **Best Use of ElevenLabs ($100):** Dual-host audio synthesis with multi-buffer concatenation and word-level alignment timestamps for karaoke captions.
-* 🚀 **Best Use of Render ($200):** Native zero-config `render.yaml` specification ready for one-click deployment.
-* 🌐 **Best Use of a .tech Domain ($100):** Architected to power `podsnippet.tech`.
+* 🥇 **Overall Winner:** A complete, production-grade micro-SaaS with sound unit economics, exceptional UI/UX, and immediate utility for creators.
+* 🤖 **Best Use of Gemma:** Leverages open-weight Google Gemma 2 for spoken script adaptation, oral pacing, and technical phonetic adaptation.
+* 🎙️ **Best Use of ElevenLabs:** Dual-host audio synthesis with multi-buffer concatenation and word-level alignment timestamps for karaoke captions.
+* 🚀 **Best Use of Render:** Native zero-config `render.yaml` specification ready for one-click deployment.
+* 🌐 **Best Use of a .tech Domain:** Architected to power `podsnippet.tech`.
 
 ---
 
