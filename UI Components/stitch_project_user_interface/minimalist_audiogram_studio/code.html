@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PodSnippet Studio • 3D Audiogram Stage</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Space+Grotesk:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style>
+    @layer base {
+      html, body { margin: 0; padding: 0; }
+      body { overscroll-behavior: none; }
+    }
+    ::-webkit-scrollbar { display: none; }
+
+    .obsidian-card {
+      background: rgba(14, 17, 27, 0.58);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+    .obsidian-card-elevated {
+      background: linear-gradient(145deg, rgba(18, 22, 36, 0.65) 0%, rgba(10, 13, 22, 0.72) 100%);
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.7);
+    }
+    .soft-glow-cyan {
+      box-shadow: 0 0 32px -4px rgba(0, 242, 254, 0.25);
+    }
+    .soft-glow-purple {
+      box-shadow: 0 0 32px -4px rgba(181, 95, 230, 0.22);
+    }
+  </style>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface": "#090a10",
+            "surface-panel": "rgba(14, 17, 27, 0.6)",
+            "primary": "#00f2fe",
+            "secondary": "#d8b4fe",
+            "accent-purple": "#b55fe6",
+            "border-subtle": "rgba(255, 255, 255, 0.08)",
+          },
+          fontFamily: {
+            sans: ["Inter", "sans-serif"],
+            display: ["Space Grotesk", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-[#07080d] font-sans text-slate-200 min-h-screen selection:bg-cyan-400 selection:text-black relative overflow-x-hidden antialiased">
+<!-- Subtle ambient cosmic glows -->
+<div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+<div class="absolute top-[-10%] left-[15%] w-[650px] h-[650px] rounded-full bg-cyan-500/[0.04] blur-[150px]"></div>
+<div class="absolute top-[35%] right-[-5%] w-[600px] h-[600px] rounded-full bg-purple-600/[0.04] blur-[160px]"></div>
+<div class="absolute bottom-[-10%] left-[40%] w-[550px] h-[550px] rounded-full bg-blue-600/[0.03] blur-[160px]"></div>
+</div>
+<!-- Minimal Transparent Header -->
+<header class="fixed top-0 left-0 right-0 h-16 bg-[#07080d]/80 backdrop-blur-xl z-50 flex items-center justify-between px-8 border-b border-white/[0.06]">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-3">
+<img alt="PodSnippet Logo" class="h-7 w-auto object-contain opacity-95 drop-shadow-[0_0_8px_rgba(0,242,254,0.35)]" src="https://lh3.googleusercontent.com/aida/AEtjO1VHcdwmOzmpLcOj-8XUmLMAKFysTMIL6fv9LegUG_w5f4BBL3e7mfsm1qEvbe8KrAFNSAr7eqVTkmN_wvVC6PPgvU88mZHlxQVMf5nDI_gbkwnuGmWedVDNhsWHv5yPdRhmKbRrVHL7q7d8qrcYBQ_FvQn1r4GLlrGExUNnEqrD2DaxSS4T1rjdiWv6eXKjP2u9KX6G3Vr2VUEuXbBU0SO5nZQxYnLGucmrrgbqCDe87w"/>
+<span class="font-display font-semibold text-lg text-white tracking-tight">PodSnippet Studio</span>
+</div>
+<div class="h-4 w-px bg-white/10 hidden sm:block"></div>
+<div class="hidden sm:flex items-center gap-2 text-xs font-mono text-slate-400">
+<span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+<span>Dual-Host Session</span>
+</div>
+</div>
+<!-- Quick Audio Engine & Profile -->
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center gap-2 text-xs text-slate-400 bg-white/[0.03] border border-white/[0.06] rounded-full px-3.5 py-1">
+<span class="text-cyan-300 font-medium">Gemma 2</span>
+<span class="text-white/20">|</span>
+<span class="text-purple-300 font-medium">ElevenLabs</span>
+</div>
+<img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-white/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5resuaU4zjpKM7octp1DkyQb8i_fn5reWmceF-yBhMt3AcgF33hIMwJHMNih7PQplEJYz-ude2xKeISy0CTm7W2JmfAXr3Ecr5ZE2hiWPl07ZTLJFLfsU66-Bwzzi9PvHyyEHlGqgj_A3QP7t5xsDFxJk1y8ZeOBF_7gfp37sv7uBJGrvaB5aiGUK1g_DKB4H0Ok5H34PXBYByub93KAq2ubhJFx9-zmVVhZzeeaR"/>
+</div>
+</header>
+<!-- Sidebar: Minimal Icons & Labels -->
+<aside class="fixed left-0 top-16 bottom-20 w-56 bg-[#07080d]/60 backdrop-blur-xl z-40 flex flex-col justify-between py-6 px-3 border-r border-white/[0.06]">
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-cyan-400/10 text-cyan-300 border border-cyan-400/20 font-medium text-sm transition-all" href="#">
+<span class="material-symbols-outlined text-lg">view_in_ar</span>
+<span>Studio Stage</span>
+</a>
+<a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/[0.04] text-sm transition-all" href="#">
+<span class="material-symbols-outlined text-lg">edit_note</span>
+<span>Script Editor</span>
+</a>
+<a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/[0.04] text-sm transition-all" href="#">
+<span class="material-symbols-outlined text-lg">record_voice_over</span>
+<span>Voice Casting</span>
+</a>
+<a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/[0.04] text-sm transition-all" href="#">
+<span class="material-symbols-outlined text-lg">article</span>
+<span>Source Ingestion</span>
+</a>
+<a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/[0.04] text-sm transition-all" href="#">
+<span class="material-symbols-outlined text-lg">analytics</span>
+<span>Analytics</span>
+</a>
+</nav>
+<!-- Ultra-minimal status footer -->
+<div class="px-3.5 py-3 rounded-xl bg-white/[0.02] border border-white/[0.05] flex items-center justify-between text-xs text-slate-400 font-mono">
+<span>LATENCY</span>
+<span class="text-emerald-400 font-semibold">124ms</span>
+</div>
+</aside>
+<!-- Spacious Workstation Content -->
+<div class="pl-56 relative z-10">
+<main class="pt-24 pb-32 px-10 max-w-[1600px] mx-auto min-h-screen flex flex-col gap-8">
+<!-- Minimalist Breadcrumb / Episode Header -->
+<div class="flex items-center justify-between">
+<div>
+<div class="text-xs text-slate-500 font-mono mb-1">KUBERNETES-IN-PRODUCTION / EPISODE 04</div>
+<h1 class="text-2xl font-display font-semibold text-white tracking-tight">The Edge Dilemma</h1>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-2 bg-white/[0.04] border border-white/[0.08] px-3.5 py-1.5 rounded-xl text-xs font-mono text-slate-300">
+<span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+<span>03:14 Total Length</span>
+</div>
+</div>
+</div>
+<!-- Main Layout Grid: Hero Stage & Minimal Sidebar -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
+<!-- Left Hero Area (8 Cols) -->
+<div class="xl:col-span-8 flex flex-col gap-6">
+<!-- 3D WebGL Studio Hero Canvas -->
+<div class="relative w-full rounded-3xl obsidian-card-elevated overflow-hidden border border-white/[0.09] shadow-2xl">
+<!-- Stage Toolbar -->
+<div class="absolute top-5 inset-x-6 z-20 flex items-center justify-between pointer-events-none">
+<div class="flex items-center gap-2 pointer-events-auto bg-black/40 backdrop-blur-md px-2 py-1 rounded-xl border border-white/10 text-xs">
+<button class="px-3 py-1 rounded-lg bg-cyan-400/20 text-cyan-300 font-medium">Studio View</button>
+<button class="px-3 py-1 rounded-lg text-slate-400 hover:text-white transition-colors">Orbit</button>
+</div>
+<div class="pointer-events-auto flex items-center gap-2 bg-black/40 backdrop-blur-md px-3 py-1 rounded-xl border border-white/10 text-xs text-emerald-400 font-mono">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+<span>60 FPS</span>
+</div>
+</div>
+<!-- Sleek 3D Stage Space -->
+<div class="relative w-full aspect-[16/9] min-h-[460px] bg-gradient-to-b from-[#090c16] via-[#070912] to-[#05060b] flex items-center justify-center overflow-hidden">
+<!-- Radial subtle grid -->
+<div class="absolute inset-0 opacity-[0.14] bg-[radial-gradient(#00f2fe_1px,transparent_1px)] [background-size:32px_32px]"></div>
+<!-- Sleek Visualizer Waves Background -->
+<div class="absolute w-[500px] h-[500px] rounded-full border border-cyan-500/10 bg-cyan-500/[0.02] blur-3xl pointer-events-none"></div>
+<!-- Streamlined Dual Speaker Centerpiece -->
+<div class="relative z-10 w-full max-w-xl px-8 flex items-center justify-between">
+<!-- Host Alex (Cyan Active Spotlight) -->
+<div class="flex flex-col items-center gap-3.5 group">
+<div class="relative">
+<div class="absolute -inset-3.5 rounded-full bg-cyan-400/20 blur-xl"></div>
+<div class="relative w-28 h-28 rounded-full p-1 border-2 border-cyan-400/80 soft-glow-cyan bg-[#0a0f1d]">
+<img class="w-full h-full rounded-full object-cover" data-alt="Cyberpunk technical host Alex with neon cyan studio headphones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvStxvHH8Ia89-2oOjgpolHm5GPXxi7ljd4S-Il9Iylb_vPVAzjIWHpwwE5dRm2xTAj6lsNmcMZ91dOdX_PBtJqRSs6A0ySUZ8gQWzuv--nzv8bEwlH7-RxmngnKLF_sVL1ySxWO0MXUILWSLWQytVbDXP82KMEeShViVo65EFkXm1OEpj0z0ahG4Bo26GVuMv27wceosV0dwASQJRrWkpzGm-u_SBMyUN8aUJINN2"/>
+</div>
+<div class="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-cyan-400 text-slate-950 flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-sm font-bold">mic</span>
+</div>
+</div>
+<div class="text-center">
+<div class="font-display font-semibold text-white text-base tracking-wide">Alex</div>
+<div class="text-xs text-cyan-300/80 font-mono mt-0.5">Host A</div>
+</div>
+</div>
+<!-- Central Audio Spectrum Bars -->
+<div class="flex items-center gap-1.5 h-16 px-4 py-2 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
+<div class="w-1 bg-cyan-400/80 h-6 rounded-full animate-pulse"></div>
+<div class="w-1 bg-cyan-400/90 h-10 rounded-full animate-pulse" style="animation-delay: 100ms"></div>
+<div class="w-1 bg-gradient-to-t from-cyan-400 to-purple-400 h-14 rounded-full animate-pulse" style="animation-delay: 200ms"></div>
+<div class="w-1 bg-purple-400/90 h-9 rounded-full animate-pulse" style="animation-delay: 300ms"></div>
+<div class="w-1 bg-purple-400/70 h-5 rounded-full animate-pulse" style="animation-delay: 400ms"></div>
+</div>
+<!-- Host Sam (Purple Co-Host) -->
+<div class="flex flex-col items-center gap-3.5 group opacity-85">
+<div class="relative">
+<div class="absolute -inset-3 rounded-full bg-purple-500/15 blur-lg"></div>
+<div class="relative w-28 h-28 rounded-full p-1 border-2 border-purple-400/60 soft-glow-purple bg-[#0a0f1d]">
+<img class="w-full h-full rounded-full object-cover" data-alt="Futuristic co-host Sam with sleek purple glasses" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBc40bF0omU-caXomvw5hwQbATVvZyuzSqwEzhCp1Efy63HeaIzNBDzupSLS6i5b6MJ1PDp6hYenOKvNNvfZPvq37oAcN_UohdATeGGSdl-zR0TQ_UQE7SdOaxkNAEm4qssUFZA_J7aQmWKcNH2Qsao0_1P9FDngdPAmw-Dbn7lOSQi07mtlaklx0hSvmy29ysYQE9Z6Kn8p-qfXtidRulx6EioE5Fu4MDJRChdheYS"/>
+</div>
+<div class="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-sm">mic_none</span>
+</div>
+</div>
+<div class="text-center">
+<div class="font-display font-semibold text-white text-base tracking-wide">Sam</div>
+<div class="text-xs text-purple-300/80 font-mono mt-0.5">Host B</div>
+</div>
+</div>
+</div>
+<!-- Streamlined Active Dialogue Callout -->
+<div class="absolute bottom-6 inset-x-8 z-20 flex justify-center">
+<div class="bg-black/50 backdrop-blur-xl px-6 py-3 rounded-2xl border border-white/10 text-center max-w-xl">
+<span class="text-cyan-300 font-mono text-xs font-semibold uppercase mr-2">Alex:</span>
+<span class="text-slate-200 text-sm italic font-normal">"Wait, so why does everyone deploy Kubernetes on a single Raspberry Pi?"</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Clean Karaoke Subtitle & Player Area -->
+<div class="obsidian-card rounded-2xl p-6 border border-white/[0.08] flex flex-col gap-5">
+<div class="flex items-center justify-between text-xs text-slate-400 font-mono">
+<span class="text-slate-300 font-sans font-medium text-sm">Live Spoken Script</span>
+<span>01:42 / 03:14</span>
+</div>
+<!-- Single Clean Karaoke Transcript Line -->
+<div class="py-3 px-4 rounded-xl bg-white/[0.02] border border-white/[0.06] flex items-center flex-wrap gap-2 text-base text-slate-400 leading-relaxed">
+<span class="text-slate-400">Wait,</span>
+<span class="text-slate-400">so</span>
+<span class="text-slate-400">why</span>
+<span class="text-slate-400">does</span>
+<span class="text-slate-400">everyone</span>
+<span class="px-2.5 py-0.5 rounded-lg bg-cyan-400/20 text-cyan-200 font-medium border border-cyan-400/40 shadow-sm">deploy</span>
+<span class="text-white font-medium">Kubernetes</span>
+<span class="text-slate-300">on a single Raspberry Pi?</span>
+</div>
+<!-- High-End Waveform Visual Scrubber -->
+<div class="relative w-full h-14 bg-black/40 rounded-xl overflow-hidden flex items-center px-3 border border-white/[0.06] cursor-pointer">
+<!-- Waveform Bars -->
+<div class="w-full h-10 flex items-center justify-between gap-[3px]">
+<div class="w-1 bg-cyan-400 h-[35%] rounded-full"></div>
+<div class="w-1 bg-cyan-400 h-[60%] rounded-full"></div>
+<div class="w-1 bg-cyan-400 h-[90%] rounded-full"></div>
+<div class="w-1 bg-cyan-400 h-[45%] rounded-full"></div>
+<div class="w-1 bg-cyan-400 h-[80%] rounded-full"></div>
+<div class="w-1 bg-cyan-400 h-[100%] rounded-full"></div>
+<div class="w-1 bg-cyan-400 h-[65%] rounded-full"></div>
+<div class="w-1 bg-cyan-400 h-[85%] rounded-full"></div>
+<div class="w-1 bg-cyan-400 h-[40%] rounded-full"></div>
+<div class="w-1 bg-cyan-400 h-[75%] rounded-full"></div>
+<div class="w-1 bg-cyan-400 h-[95%] rounded-full"></div>
+<div class="w-1 bg-cyan-400 h-[50%] rounded-full"></div>
+<div class="w-1 bg-cyan-400 h-[70%] rounded-full"></div>
+<div class="w-1 bg-cyan-400 h-[88%] rounded-full"></div>
+<!-- Played divider point -->
+<div class="w-1 bg-white/20 h-[60%] rounded-full"></div>
+<div class="w-1 bg-white/20 h-[40%] rounded-full"></div>
+<div class="w-1 bg-white/20 h-[75%] rounded-full"></div>
+<div class="w-1 bg-white/20 h-[90%] rounded-full"></div>
+<div class="w-1 bg-white/20 h-[35%] rounded-full"></div>
+<div class="w-1 bg-white/20 h-[55%] rounded-full"></div>
+<div class="w-1 bg-white/20 h-[70%] rounded-full"></div>
+<div class="w-1 bg-white/20 h-[85%] rounded-full"></div>
+<div class="w-1 bg-white/20 h-[30%] rounded-full"></div>
+</div>
+<!-- Playhead line -->
+<div class="absolute left-[58%] top-0 bottom-0 w-0.5 bg-cyan-400 shadow-[0_0_8px_#00f2fe]">
+<div class="absolute -top-1 -translate-x-1/2 w-3 h-3 bg-white rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Minimal Control Sidebar (4 Cols) -->
+<div class="xl:col-span-4 flex flex-col gap-6">
+<!-- Episode Overview & Voice Timbre -->
+<div class="obsidian-card rounded-2xl p-6 border border-white/[0.08] flex flex-col gap-5">
+<h2 class="text-sm font-medium text-slate-400 font-mono uppercase tracking-wider">Voice Casting</h2>
+<div class="space-y-3">
+<!-- Alex Voice -->
+<div class="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-cyan-400/10 text-cyan-300 flex items-center justify-center border border-cyan-400/20">
+<span class="material-symbols-outlined text-base">graphic_eq</span>
+</div>
+<div>
+<div class="text-sm font-medium text-white">Alex <span class="text-xs text-slate-400 font-mono ml-1">• Adam</span></div>
+<div class="text-xs text-slate-400">Deep Conversational</div>
+</div>
+</div>
+<button class="p-2 rounded-lg hover:bg-white/10 text-cyan-400 transition-colors">
+<span class="material-symbols-outlined text-base">play_arrow</span>
+</button>
+</div>
+<!-- Sam Voice -->
+<div class="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-purple-500/10 text-purple-300 flex items-center justify-center border border-purple-500/20">
+<span class="material-symbols-outlined text-base">graphic_eq</span>
+</div>
+<div>
+<div class="text-sm font-medium text-white">Sam <span class="text-xs text-slate-400 font-mono ml-1">• Rachel</span></div>
+<div class="text-xs text-slate-400">Crisp Technical</div>
+</div>
+</div>
+<button class="p-2 rounded-lg hover:bg-white/10 text-purple-300 transition-colors">
+<span class="material-symbols-outlined text-base">play_arrow</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Clean Export & Delivery Panel -->
+<div class="obsidian-card rounded-2xl p-6 border border-white/[0.08] flex flex-col gap-4">
+<h2 class="text-sm font-medium text-slate-400 font-mono uppercase tracking-wider">Broadcast &amp; Export</h2>
+<!-- Primary Master MP3 -->
+<button class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-cyan-400 to-cyan-300 text-slate-950 font-semibold text-sm flex items-center justify-center gap-2 hover:opacity-95 shadow-lg shadow-cyan-400/20 transition-all">
+<span class="material-symbols-outlined text-lg">download</span>
+<span>Download Master MP3</span>
+</button>
+<!-- Video Audiogram -->
+<button class="w-full py-3 px-4 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-white font-medium text-sm flex items-center justify-between border border-white/[0.08] transition-all">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-purple-300 text-lg">movie</span>
+<span>Export Audiogram MP4</span>
+</div>
+<span class="text-xs text-slate-400 font-mono">1080p</span>
+</button>
+<!-- Secondary Actions -->
+<div class="grid grid-cols-2 gap-3 pt-2">
+<button class="py-2.5 px-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.06] text-xs font-mono text-slate-300 border border-white/[0.06] flex items-center justify-center gap-2 transition-all">
+<span class="material-symbols-outlined text-sm text-cyan-400">subtitles</span>
+<span>SRT Subtitles</span>
+</button>
+<button class="py-2.5 px-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.06] text-xs font-mono text-slate-300 border border-white/[0.06] flex items-center justify-center gap-2 transition-all">
+<span class="material-symbols-outlined text-sm text-purple-400">share</span>
+<span>Share Link</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Bottom Floating Transport Player Bar -->
+<footer class="fixed bottom-0 left-0 right-0 h-20 bg-[#07080d]/85 backdrop-blur-2xl z-50 flex items-center justify-between px-8 border-t border-white/[0.07]">
+<!-- Left: Now playing simple info -->
+<div class="flex items-center gap-4 w-1/4">
+<div class="w-10 h-10 rounded-xl bg-cyan-400/10 text-cyan-300 border border-cyan-400/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-xl">audiotrack</span>
+</div>
+<div class="truncate">
+<div class="text-sm font-medium text-white truncate">Kubernetes vs Nomad: The Edge Dilemma</div>
+<div class="text-xs text-slate-400 font-mono">03:14 • Dual-Host</div>
+</div>
+</div>
+<!-- Center: Primary transport controls -->
+<div class="flex flex-col items-center gap-1.5 flex-1 max-w-xl">
+<div class="flex items-center gap-5">
+<button class="text-slate-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-xl">replay_5</span>
+</button>
+<button class="w-10 h-10 rounded-full bg-cyan-400 text-slate-950 flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-md shadow-cyan-400/25">
+<span class="material-symbols-outlined text-xl font-bold">play_arrow</span>
+</button>
+<button class="text-slate-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-xl">forward_5</span>
+</button>
+</div>
+</div>
+<!-- Right: Quick master volume & download button -->
+<div class="flex items-center justify-end gap-5 w-1/4">
+<div class="flex items-center gap-2 text-slate-400">
+<span class="material-symbols-outlined text-lg">volume_up</span>
+<div class="w-20 h-1 bg-white/10 rounded-full overflow-hidden">
+<div class="w-3/4 h-full bg-cyan-400"></div>
+</div>
+</div>
+<button class="px-4 py-2 rounded-xl bg-cyan-400 text-slate-950 font-semibold text-xs flex items-center gap-1.5 shadow-md hover:opacity-95 transition-all">
+<span class="material-symbols-outlined text-sm font-bold">download</span>
+<span>Export</span>
+</button>
+</div>
+</footer>
+</body></html>
