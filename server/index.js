@@ -41,20 +41,9 @@ app.get('/api/samples', (req, res) => {
   });
 });
 
-// Update API Keys at Runtime from UI Settings Modal
+// Runtime configuration disabled in production
 app.post('/api/config', (req, res) => {
-  const { elevenLabsApiKey, gemmaApiKey } = req.body;
-  if (elevenLabsApiKey !== undefined) {
-    process.env.ELEVENLABS_API_KEY = elevenLabsApiKey.trim();
-  }
-  if (gemmaApiKey !== undefined) {
-    process.env.GEMMA_API_KEY = gemmaApiKey.trim();
-  }
-  res.json({
-    success: true,
-    hasElevenLabsKey: Boolean(process.env.ELEVENLABS_API_KEY),
-    hasGemmaKey: Boolean(process.env.GEMMA_API_KEY),
-  });
+  res.status(403).json({ error: 'Runtime configuration is disabled in production mode.' });
 });
 
 // Article Extraction Endpoint (From URL or Raw Markdown)

@@ -7,7 +7,6 @@ import { ScriptEditorView } from './components/ScriptEditorView';
 import { VoiceCastingView } from './components/VoiceCastingView';
 import { StudioStageView } from './components/StudioStageView';
 import { AnalyticsView } from './components/AnalyticsView';
-import { SettingsModal } from './components/SettingsModal';
 
 export function App() {
   // Navigation: 'input-source' | 'script-editor' | 'voice-casting' | 'studio' | 'analytics'
@@ -74,7 +73,6 @@ export function App() {
   const [isSynthesizing, setIsSynthesizing] = useState(false);
   const [hasElevenLabsKey, setHasElevenLabsKey] = useState(false);
   const [hasGemmaKey, setHasGemmaKey] = useState(false);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
   // Global Audio Playback State
@@ -322,21 +320,6 @@ export function App() {
     }
   };
 
-  // Save API keys
-  const handleSaveKeys = async (keys) => {
-    try {
-      const res = await fetch('/api/config', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(keys),
-      });
-      const data = await res.json();
-      setHasElevenLabsKey(data.hasElevenLabsKey);
-      setHasGemmaKey(data.hasGemmaKey);
-    } catch (err) {
-      console.error('Failed to update keys:', err);
-    }
-  };
 
   // Load archived episode from analytics
   const handleSelectArchivedEpisode = (ep) => {
@@ -359,9 +342,6 @@ export function App() {
 
       {/* Top Persistent Header */}
       <TopHeader
-        hasElevenLabsKey={hasElevenLabsKey}
-        hasGemmaKey={hasGemmaKey}
-        onOpenSettings={() => setIsSettingsOpen(true)}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
       />
@@ -495,14 +475,6 @@ export function App() {
         onSeek={seek}
       />
 
-      {/* Settings Modal (API Keys) */}
-      <SettingsModal
-        isOpen={isSettingsOpen}
-        onClose={() => setIsSettingsOpen(false)}
-        hasElevenLabsKey={hasElevenLabsKey}
-        hasGemmaKey={hasGemmaKey}
-        onSaveKeys={handleSaveKeys}
-      />
     </div>
   );
 }

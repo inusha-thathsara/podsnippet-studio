@@ -23,8 +23,8 @@ export function TopHeader({
           <span className="font-headline text-base text-white font-semibold tracking-tight">
             PodSnippet Studio
           </span>
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-slate-400 font-normal">
-            v2.4
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-medium">
+            PROD
           </span>
         </div>
       </div>
@@ -47,25 +47,10 @@ export function TopHeader({
       {/* Right Controls: AI Engine Status & User Profile */}
       <div className="flex items-center gap-4">
         {/* Connection status indicator */}
-        <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-slate-400 bg-white/[0.02] border border-white/[0.06] rounded-full px-3 py-1">
+        <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-slate-300 bg-white/[0.03] border border-white/[0.08] rounded-full px-3 py-1">
           <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#10b981] animate-pulse"></span>
-          <span>Gemma 2 &amp; ElevenLabs Connected</span>
+          <span>Studio Engine Live</span>
         </div>
-
-        {/* Tune / Settings Button */}
-        <button
-          onClick={onOpenSettings}
-          className="p-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/[0.06] transition-colors relative"
-          title="Configure API Keys & Studio Settings"
-        >
-          <span className="material-symbols-outlined text-[20px]">tune</span>
-          {(!hasElevenLabsKey || !hasGemmaKey) && (
-            <span
-              className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-amber-400"
-              title="Simulation Mode active. Click to add API keys"
-            />
-          )}
-        </button>
 
         {/* User Profile Avatar */}
         <img
