@@ -24,8 +24,64 @@ export async function generateScript({ articleTitle, articleContent, mode = 'sol
   return generateHeuristicScript(articleTitle, articleContent, mode);
 }
 
+const CANDIDATE_GEMMA_MODELS = [
+  'gemma-4-26b-a4b-it',
+  'gemma-2-9b-it',
+  'gemma-4-31b-it',
+  'gemini-3.8-flash',
+  'gemini-2.5-flash',
+];
+
 /**
- * Call Gemma 2 for Solo Flash Teaser
+ * Robust JSON parser for LLM responses
+ */
+function extractJson(text) {
+  if (!text) throw new Error('Empty model response');
+  const jsonMatch = text.match(/\{[\s\S]*\}/);
+  if (jsonMatch) {
+    return JSON.parse(jsonMatch[0]);
+  }
+  const cleaned = text.replace(/```json/gi, '').replace(/```/gi, '').trim();
+  return JSON.parse(cleaned);
+}
+
+/**
+ * Execute model generation across candidate models
+ */
+async function callGemmaApi(systemPrompt, userPrompt, apiKey, maxTokens = 1200) {
+  let lastError = null;
+
+  for (const model of CANDIDATE_GEMMA_MODELS) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ role: 'user', parts: [{ text: `${systemPrompt}\n\n${userPrompt}` }] }],
+          generationConfig: { temperature: 0.7, maxOutputTokens: maxTokens },
+        }),
+      });
+
+      if (!res.ok) {
+        const errBody = await res.text();
+        lastError = new Error(`Model ${model} returned ${res.status}: ${errBody}`);
+        continue;
+      }
+
+      const data = await res.json();
+      const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      return extractJson(rawText);
+    } catch (err) {
+      lastError = err;
+    }
+  }
+
+  throw lastError || new Error('All candidate Gemma models failed');
+}
+
+/**
+ * Call Gemma for Solo Flash Teaser
  */
 async function callGemmaSolo(title, content, apiKey) {
   const systemPrompt = `You are an elite podcast producer and audio scriptwriter. 
@@ -39,7 +95,7 @@ Rules:
    - Outro CTA (50-60s): Invite listeners to read the full article.
 3. Phoneticize technical jargon so text-to-speech sounds natural (e.g., say "see-eye-see-dee" for CI/CD, "sequel" for SQL, "koo-ber-net-eez" for k8s).
 4. Target length: strictly between 120 and 150 spoken words.
-Return ONLY a JSON object with this exact shape:
+Return ONLY a valid JSON object with this exact shape:
 {
   "mode": "solo",
   "title": "${title}",
@@ -49,28 +105,11 @@ Return ONLY a JSON object with this exact shape:
 }`;
 
   const prompt = `Article Title: ${title}\n\nArticle Content:\n${content.slice(0, 4000)}`;
-
-  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemma-2-9b-it:generateContent?key=${apiKey}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ role: 'user', parts: [{ text: `${systemPrompt}\n\n${prompt}` }] }],
-      generationConfig: { temperature: 0.7, maxOutputTokens: 800 }
-    })
-  });
-
-  if (!res.ok) {
-    throw new Error(`Gemma API error: ${res.statusText}`);
-  }
-
-  const data = await res.json();
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-  const cleaned = text.replace(/```json/g, '').replace(/```/g, '').trim();
-  return JSON.parse(cleaned);
+  return await callGemmaApi(systemPrompt, prompt, apiKey, 900);
 }
 
 /**
- * Call Gemma 2 for Dual-Host "NotebookLM Style" Dialogue
+ * Call Gemma for Dual-Host "NotebookLM Style" Dialogue
  */
 async function callGemmaDuo(title, content, apiKey) {
   const systemPrompt = `You are a professional podcast producer creating a 2-3 minute conversational deep-dive episode between two co-hosts, Alex and Sam.
@@ -97,25 +136,9 @@ Return ONLY a valid JSON object with this shape:
 }`;
 
   const prompt = `Article Title: ${title}\n\nArticle Content:\n${content.slice(0, 4000)}`;
-
-  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemma-2-9b-it:generateContent?key=${apiKey}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ role: 'user', parts: [{ text: `${systemPrompt}\n\n${prompt}` }] }],
-      generationConfig: { temperature: 0.7, maxOutputTokens: 1200 }
-    })
-  });
-
-  if (!res.ok) {
-    throw new Error(`Gemma API error: ${res.statusText}`);
-  }
-
-  const data = await res.json();
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-  const cleaned = text.replace(/```json/g, '').replace(/```/g, '').trim();
-  return JSON.parse(cleaned);
+  return await callGemmaApi(systemPrompt, prompt, apiKey, 1400);
 }
+
 
 /**
  * High-Quality Fallback Generator (Produces broadcast-ready scripts if API keys are not supplied)
