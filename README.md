@@ -9,6 +9,7 @@
 [![3D Stage](https://img.shields.io/badge/3D%20Stage-Three.js%20WebGL-06b6d4?style=for-the-badge&logo=three.js&logoColor=white)](https://threejs.org)
 [![Frontend](https://img.shields.io/badge/Frontend-React%2018%20%2B%20Vite-3b82f6?style=for-the-badge&logo=react&logoColor=white)](https://vitejs.dev)
 [![Deploy on Render](https://img.shields.io/badge/Deploy-Render%20Ready-000000?style=for-the-badge&logo=render&logoColor=white)](https://render.com)
+[![GitHub Pages](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-22c55e?style=for-the-badge&logo=github&logoColor=white)](https://inusha-thathsara.github.io/podsnippet-studio/)
 [![License](https://img.shields.io/badge/License-MIT-emerald?style=for-the-badge)](LICENSE)
 
 ---
